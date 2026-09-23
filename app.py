@@ -1,19 +1,20 @@
 from flask import Flask , request, render_template
+from src.Pipeline.Step_02_Pred_ppln import CustomData
 
 app= Flask(__name__)
 
-app.route("/")
+@app.route("/")
 def Home():
     return render_template("home.html")
 
 
-app.route("/predict",["GET","POST"])
+@app.route("/predict",methods=["GET","POST"])
 def predict():
     if request.method==["GET"]:
         return render_template("home.html")
 
-        custom_Data = CustomData()
-    df = custom_Data.receiveDataFromWeb(
+    custom_Data = CustomData()
+    output = custom_Data.receiveDataFromWeb(
         Airline=request.form.get("Airline"),
         Date_of_Journey=request.form.get("Dep_Time"),
         Source=request.form.get("Source"),
@@ -21,10 +22,11 @@ def predict():
         Arrival_Time=request.form.get("Arrival_Time"),
         Total_Stops=request.form.get("Total_Stops"),
     )
-
-    output = custom_Data.clean_data(df)
-    return render_template(
-        "home.html",
+    print(output)
+# df = custom_Data.clean_Data(df)
+    
+#    output = custom_Data.clean_data(df)
+    return render_template("home.html",
         prediction_text=f"Your Flight price is Rs. {output}",
     )
 

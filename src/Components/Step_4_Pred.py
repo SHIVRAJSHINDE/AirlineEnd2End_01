@@ -1,11 +1,43 @@
 import joblib
+import pandas as pd
 
 class Pred_clening:
-    def duration(self, df):
+
+    def generate_Date_Time(self,df):
+
+        df['Date_of_Journey'] = pd.to_datetime(df['Date_of_Journey'],format='mixed')
+
+        df['D_Day'] = df['Date_of_Journey'].dt.day
+        df['D_Month'] = df['Date_of_Journey'].dt.month
+        df['D_Year'] = df['Date_of_Journey'].dt.year
+
+        df['D_Hour'] = df['Date_of_Journey'].dt.hour
+        df['D_Minute'] = df['Date_of_Journey'].dt.minute
+
+
+        df['Arrival_Time'] = pd.to_datetime(df['Arrival_Time'],format='mixed')
+        df['A_Hour'] = df['Arrival_Time'].dt.hour
+        df['A_Minute'] = df['Arrival_Time'].dt.minute
+
+        df['A_Day'] = df['Arrival_Time'].dt.day
+        df['A_Month'] = df['Arrival_Time'].dt.month
+        df['A_Year'] = df['Arrival_Time'].dt.year
+
+        return df
+
+    def duration(self,df):
+        print("_______________Duration_____________")
+
+        print(df)
+        df['Date_of_Journey'] = pd.to_datetime(df['Date_of_Journey'],format='mixed')
+        df['Arrival_Time'] = pd.to_datetime(df['Arrival_Time'],format='mixed')
+
         Time_Value = df['Arrival_Time'] - df['Date_of_Journey']
         print(Time_Value)
         Time_Value = Time_Value.dt.total_seconds() / 60
         df['DurHrs_Mins'] = Time_Value.astype(int)
+        print(df.T)
+        print("------Duration-S-Completed")
         return df
 
     def drop_Col_From_web(self,df):
@@ -23,7 +55,7 @@ class Pred_clening:
 
         print(df)
         df["Total_Stops"] = df["Total_Stops"].replace(stop_mapping)
-        print("------Data TotalStops-------")
+        print("------TotalStops Cleaned-------")
 
         return df
 
